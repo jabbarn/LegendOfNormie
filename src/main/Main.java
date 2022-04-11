@@ -10,9 +10,13 @@ public class Main {
         window.setDefaultCloseOperation((JFrame.EXIT_ON_CLOSE));
         window.setResizable(false);
         window.setTitle("Legend of Normie");
+        GamePanel panel = new GamePanel();
+        window.add(panel);
+        window.pack();
 //      P1: is set to null so that window is centered of the screen.
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
+        panel.startGameThread();
     }
 }
