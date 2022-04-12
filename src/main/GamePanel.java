@@ -1,6 +1,7 @@
 package main;
 
 import entity.Player;
+import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,19 +15,27 @@ public class GamePanel extends JPanel implements Runnable {
     private final int maxScreenRow = 15;
     private final int screenWidth = tileSize * maxScreenColumn;
     private final int screenHeight = tileSize * maxScreenRow;
+
+    // world settings
+    private final int maxWorldCol = 50;
+    private final int maxWorldRow = 50;
+    private final int worldWidth = this.tileSize * this.maxWorldCol;
+    private final int worldHeight = this.tileSize * this.maxWorldRow;
+
+    TileManager manager = new TileManager(this);
     protected KeyHandler handler = new KeyHandler();
     volatile Thread gameThread;
-    private Player player = new Player(this, handler);
+    private Player player = new Player(this, this.handler);
     private final int FPS = 60;
     /**
      * Creates a new <code>JPanel</code> with a double buffer
      * and a flow layout.
      */
     public GamePanel() {
-        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+        this.setPreferredSize(new Dimension(this.screenWidth, this.screenHeight));
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
-        this.addKeyListener(handler);
+        this.addKeyListener(this.handler);
         this.setFocusable(true);
     }
 
@@ -81,10 +90,48 @@ public class GamePanel extends JPanel implements Runnable {
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
         Graphics2D graphics2D = (Graphics2D) graphics;
+
+        manager.draw(graphics2D);
         player.draw(graphics2D);
         graphics2D.dispose();
     }
     public int getTileSize() {
         return tileSize;
+    }
+
+    public int getMaxScreenColumn() {
+        return maxScreenColumn;
+    }
+
+    public int getMaxScreenRow() {
+        return maxScreenRow;
+    }
+
+    public int getScreenWidth() {
+        return screenWidth;
+    }
+
+    public int getScreenHeight() {
+        return screenHeight;
+    }
+
+    public int getMaxWorldCol() {
+        return maxWorldCol;
+    }
+
+    public int getMaxWorldRow() {
+        return maxWorldRow;
+    }
+
+    public int getWorldWidth() {
+        return worldWidth;
+    }
+
+    public int getWorldHeight() {
+        return worldHeight;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }
