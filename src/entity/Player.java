@@ -21,6 +21,7 @@ public class Player extends Entity {
         this.handler = handler;
         this.screenX = panel.getScreenWidth()/2 - (panel.getTileSize()/2);
         this.screenY = panel.getScreenHeight()/2 - (panel.getTileSize()/2);
+        this.hitbox = new Rectangle(8, 16, this.panel.getTileSize()-16, this.panel.getTileSize()-16);
         this.setDefaultValues();
         this.getPlayerImage();
     }
@@ -45,28 +46,34 @@ public class Player extends Entity {
         }
     }
     public void update() {
-        if(handler.isUpPressed()) {
+        if(this.handler.isUpPressed()) {
             this.direction = "up";
-            this.y -= this.speed;
             this.checkSpriteMoving();
         }
-        else if (handler.isDownPressed()) {
+        else if (this.handler.isDownPressed()) {
             this.direction = "down";
-            this.y += this.speed;
             this.checkSpriteMoving();
         }
-        else if (handler.isLeftPressed()) {
+        else if (this.handler.isLeftPressed()) {
             this.direction = "left";
-            this.x -= this.speed;
             this.checkSpriteMoving();
         }
-        else if (handler.isRightPressed()) {
+        else if (this.handler.isRightPressed()) {
             this.direction = "right";
-            this.x += this.speed;
             this.checkSpriteMoving();
         }
     }
     public void checkSpriteMoving() {
+        this.collisionOn = false;
+        this.panel.getChecker().checkTile(this);
+        if(!this.collisionOn) {
+            switch (this.direction) {
+                case "up" -> this.y -= this.speed;
+                case "down" -> this.y += this.speed;
+                case "left" -> this.x -= this.speed;
+                case "right" -> this.x += this.speed;
+            }
+        }
         this.spriteCounter++;
         if(this.spriteCounter > 12) {
             if (this.spriteMoving) {
@@ -81,21 +88,13 @@ public class Player extends Entity {
     public void draw(Graphics2D graphics2D) {
 //        graphics2D.setColor(Color.white);
 //        graphics2D.fillRect(this.x, this.y, panel.getTileSize(), panel.getTileSize());
-        BufferedImage image = null;
-        switch(direction) {
-            case "up":
-                image = (this.spriteMoving ? this.up : this.up2);
-                break;
-            case "down":
-                image = (this.spriteMoving ? this.down : this.down2);
-                break;
-            case "left":
-                image = (this.spriteMoving ? this.left : this.left2);
-                break;
-            case "right":
-                image = (this.spriteMoving ? this.right : this.right2);
-                break;
-        }
+        BufferedImage image = switch (direction) {
+            case "up" -> (this.spriteMoving ? this.up : this.up2);
+            case "down" -> (this.spriteMoving ? this.down : this.down2);
+            case "left" -> (this.spriteMoving ? this.left : this.left2);
+            case "right" -> (this.spriteMoving ? this.right : this.right2);
+            default -> null;
+        };
         graphics2D.drawImage(image, this.screenX, this.screenY, this.panel.getTileSize(), this.panel.getTileSize(), null);
     }
 

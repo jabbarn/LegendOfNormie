@@ -1,5 +1,6 @@
 package entity;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public abstract class Entity {
@@ -10,6 +11,8 @@ public abstract class Entity {
     protected String direction;
     protected boolean spriteMoving;
     protected int spriteCounter;
+    protected Rectangle hitbox;
+    protected boolean collisionOn = false;
 
     public int getX() {
         return x;
@@ -17,5 +20,25 @@ public abstract class Entity {
 
     public int getY() {
         return y;
+    }
+
+    public Rectangle getHitbox() {
+        return hitbox;
+    }
+
+    public boolean isCollisionOn() {
+        return collisionOn;
+    }
+
+    public String getDirection() {
+        return direction;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setCollisionOn(boolean collisionOn) {
+        this.collisionOn = collisionOn;
     }
 }

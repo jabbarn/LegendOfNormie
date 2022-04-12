@@ -60,6 +60,12 @@ public class TileManager {
             for (String item: arr) {
                 this.tiles[arr.indexOf(item)] = new Tile();
                 this.tiles[arr.indexOf(item)].setImage(ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(item))));
+                if( Objects.equals(arr.get(arr.indexOf(item)), "/tiles/wall.png") ||
+                    Objects.equals(arr.get(arr.indexOf(item)), "/tiles/water.png") ||
+                    Objects.equals(arr.get(arr.indexOf(item)), "/tiles/tree.png"))
+                {
+                    this.tiles[arr.indexOf(item)].setCollision(true);
+                }
             }
         } catch(IOException e) {
             e.getStackTrace();
@@ -77,11 +83,11 @@ public class TileManager {
             int screenX = worldX - this.panel.getPlayer().getX() + this.panel.getPlayer().getScreenX();
             int screenY = worldY - this.panel.getPlayer().getY() + this.panel.getPlayer().getScreenY();
 
-            if(
-                worldX + this.panel.getTileSize() > this.panel.getPlayer().getX() - this.panel.getPlayer().getScreenX() &&
+            if( worldX + this.panel.getTileSize() > this.panel.getPlayer().getX() - this.panel.getPlayer().getScreenX() &&
                 worldX - this.panel.getTileSize() < this.panel.getPlayer().getX() + this.panel.getPlayer().getScreenX() &&
                 worldY + this.panel.getTileSize() > this.panel.getPlayer().getY() - this.panel.getPlayer().getScreenY() &&
-                worldY - this.panel.getTileSize() < this.panel.getPlayer().getY() + this.panel.getPlayer().getScreenY()) {
+                worldY - this.panel.getTileSize() < this.panel.getPlayer().getY() + this.panel.getPlayer().getScreenY())
+            {
                 graphics2D.drawImage(this.tiles[tileNum].getImage(), screenX, screenY, this.panel.getTileSize(), this.panel.getTileSize(), null);
             }
             worldCol++;
@@ -91,5 +97,12 @@ public class TileManager {
                 worldRow++;
             }
         }
+    }
+    public int[][] getMapTileNum() {
+        return mapTileNum;
+    }
+
+    public Tile[] getTiles() {
+        return tiles;
     }
 }

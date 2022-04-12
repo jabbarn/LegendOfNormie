@@ -22,9 +22,11 @@ public class GamePanel extends JPanel implements Runnable {
     private final int worldWidth = this.tileSize * this.maxWorldCol;
     private final int worldHeight = this.tileSize * this.maxWorldRow;
 
-    TileManager manager = new TileManager(this);
+    private final TileManager manager = new TileManager(this);
     protected KeyHandler handler = new KeyHandler();
     volatile Thread gameThread;
+    private CollisionChecker checker = new CollisionChecker(this);
+
     private Player player = new Player(this, this.handler);
     private final int FPS = 60;
     /**
@@ -133,5 +135,13 @@ public class GamePanel extends JPanel implements Runnable {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public CollisionChecker getChecker() {
+        return checker;
+    }
+
+    public TileManager getManager() {
+        return manager;
     }
 }

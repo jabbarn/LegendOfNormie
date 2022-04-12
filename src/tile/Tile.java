@@ -13,4 +13,12 @@ public class Tile {
     public BufferedImage getImage() {
         return image;
     }
+
+    public void setCollision(boolean collision) {
+        this.collision = collision;
+    }
+
+    public boolean isCollision() {
+        return collision;
+    }
 }
