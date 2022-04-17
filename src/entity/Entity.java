@@ -12,6 +12,7 @@ public abstract class Entity {
     protected boolean spriteMoving;
     protected int spriteCounter;
     protected Rectangle hitbox;
+    protected  int hitboxDefaultX, hitboxDefaultY;
     protected boolean collisionOn = false;
 
     public int getX() {
@@ -40,5 +41,13 @@ public abstract class Entity {
 
     public void setCollisionOn(boolean collisionOn) {
         this.collisionOn = collisionOn;
+    }
+
+    public int getHitboxDefaultX() {
+        return hitboxDefaultX;
+    }
+
+    public int getHitboxDefaultY() {
+        return hitboxDefaultY;
     }
 }

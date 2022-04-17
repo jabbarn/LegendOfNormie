@@ -15,6 +15,7 @@ public class Player extends Entity {
 
     private final int screenX;
     private final int screenY;
+    int totalKeys = 0;
 
     public Player(GamePanel panel, KeyHandler handler) {
         this.panel = panel;
@@ -22,6 +23,9 @@ public class Player extends Entity {
         this.screenX = panel.getScreenWidth()/2 - (panel.getTileSize()/2);
         this.screenY = panel.getScreenHeight()/2 - (panel.getTileSize()/2);
         this.hitbox = new Rectangle(8, 16, this.panel.getTileSize()-16, this.panel.getTileSize()-16);
+        this.hitboxDefaultX = this.hitbox.x;
+        this.hitboxDefaultY = this.hitbox.y;
+
         this.setDefaultValues();
         this.getPlayerImage();
     }
@@ -66,6 +70,8 @@ public class Player extends Entity {
     public void checkSpriteMoving() {
         this.collisionOn = false;
         this.panel.getChecker().checkTile(this);
+        int index = this.panel.getChecker().checkObject(this, true);
+        this.interact(index);
         if(!this.collisionOn) {
             switch (this.direction) {
                 case "up" -> this.y -= this.speed;
@@ -83,6 +89,28 @@ public class Player extends Entity {
                 this.spriteMoving = true;
             }
             this.spriteCounter = 0;
+        }
+    }
+    public void interact(int index) {
+        if(index != -1) {
+            String objectName = this.panel.getObjects()[index].getName();
+
+            switch(objectName) {
+                case "key" -> {
+                    this.totalKeys++;
+                    this.panel.getObjects()[index] = null;
+                }
+                case "door" -> {
+                    if(this.totalKeys > 0) {
+                        this.panel.getObjects()[index] = null;
+                        this.totalKeys--;
+                    }
+                }
+                case "boots" -> {
+                    this.speed += 2;
+                    this.panel.getObjects()[index] = null;
+                }
+            }
         }
     }
     public void draw(Graphics2D graphics2D) {

@@ -16,7 +16,7 @@ public class Main {
 //      P1: is set to null so that window is centered of the screen.
         window.setLocationRelativeTo(null);
         window.setVisible(true);
-
+        panel.setupGame();
         panel.startGameThread();
     }
 }

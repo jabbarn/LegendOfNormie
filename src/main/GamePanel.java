@@ -1,6 +1,7 @@
 package main;
 
 import entity.Player;
+import object.Object;
 import tile.TileManager;
 
 import javax.swing.*;
@@ -22,12 +23,15 @@ public class GamePanel extends JPanel implements Runnable {
     private final int worldWidth = this.tileSize * this.maxWorldCol;
     private final int worldHeight = this.tileSize * this.maxWorldRow;
 
-    private final TileManager manager = new TileManager(this);
+    private final TileManager tileManager = new TileManager(this);
+    private final AssetManager assetManager = new AssetManager(this);
     protected KeyHandler handler = new KeyHandler();
     volatile Thread gameThread;
     private CollisionChecker checker = new CollisionChecker(this);
 
     private Player player = new Player(this, this.handler);
+    private Object[] objects = new Object[10];
+
     private final int FPS = 60;
     /**
      * Creates a new <code>JPanel</code> with a double buffer
@@ -40,7 +44,9 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(this.handler);
         this.setFocusable(true);
     }
-
+    public void setupGame() {
+        assetManager.set();
+    }
     public void startGameThread() {
         this.gameThread = new Thread(this);
         this.gameThread.start();
@@ -93,7 +99,12 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(graphics);
         Graphics2D graphics2D = (Graphics2D) graphics;
 
-        manager.draw(graphics2D);
+        tileManager.draw(graphics2D);
+        for (Object object : this.objects) {
+            if (object != null) {
+                object.draw(this, graphics2D);
+            }
+        }
         player.draw(graphics2D);
         graphics2D.dispose();
     }
@@ -141,7 +152,15 @@ public class GamePanel extends JPanel implements Runnable {
         return checker;
     }
 
-    public TileManager getManager() {
-        return manager;
+    public TileManager getTileManager() {
+        return tileManager;
+    }
+
+    public AssetManager getAssetManager() {
+        return assetManager;
+    }
+
+    public Object[] getObjects() {
+        return objects;
     }
 }
